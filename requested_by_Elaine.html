@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0d12">
+<title>FOMO · English + Korean Lyrics</title>
+<style>
+:root {
+  --bg: #0b0d12;
+  --panel: #141923;
+  --muted: #8792a5;
+  --text: #eef2f8;
+  --accent: #9ee6b0;
+  --line: #283142;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: radial-gradient(ellipse at top, #192333 0, #0b0d12 58%);
+  color: var(--text);
+  font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+  min-height: 100vh;
+}
+
+.wrap {
+  width: min(850px, 100%);
+  margin: auto;
+  padding: 20px 16px 44px;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: .03em;
+}
+
+.sub {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.pill {
+  border: 1px solid #344257;
+  border-radius: 999px;
+  padding: 6px 10px;
+  color: var(--accent);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.player {
+  background: rgba(20, 25, 35, .96);
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  padding: 14px 16px;
+  position: sticky;
+  top: 8px;
+  z-index: 3;
+  box-shadow: 0 12px 35px #0006;
+}
+
+.file {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.file strong { display: block; }
+.file small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+audio {
+  width: 100%;
+  margin-top: 10px;
+  height: 38px;
+  accent-color: var(--accent);
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+
+.toggles {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.toggle {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.toggle input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.slider {
+  position: relative;
+  display: inline-block;
+  width: 34px;
+  height: 20px;
+  background-color: #283142;
+  border-radius: 20px;
+  transition: .25s;
+  border: 1px solid #344257;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 2px;
+  bottom: 2px;
+  background-color: var(--muted);
+  border-radius: 50%;
+  transition: .25s;
+}
+
+.toggle input:checked + .slider {
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
+
+.toggle input:checked + .slider:before {
+  transform: translateX(14px);
+  background-color: #0b0d12;
+}
+
+.lyrics {
+  margin: 18px auto 0;
+  max-width: 720px;
+  padding: 22vh 8px;
+  min-height: 68vh;
+  overflow: hidden;
+  mask-image: linear-gradient(transparent 0%, black 10%, black 90%, transparent 100%);
+}
+
+.line {
+  text-align: center;
+  padding: 13px 9px;
+  margin: 5px 0;
+  border-radius: 12px;
+  opacity: .48;
+  transform: scale(.97);
+  transition: all .25s;
+  scroll-margin: 40vh;
+}
+
+.en {
+  font-size: clamp(18px, 3.5vw, 25px);
+  font-weight: 700;
+  line-height: 1.4;
+  color: #c4ccda;
+}
+
+.ko {
+  font-size: clamp(14px, 2.8vw, 18px);
+  font-weight: 500;
+  line-height: 1.5;
+  color: #9ca8ba;
+  margin-top: 5px;
+}
+
+.line.past { opacity: .6; }
+.line.past .en { color: #aeb8c8; }
+.line.past .ko { color: #8793a6; }
+
+.line.future { opacity: .58; }
+
+.line.active {
+  opacity: 1;
+  transform: scale(1.02);
+  background: #9ee6b00c;
+  box-shadow: inset 0 0 0 1px #9ee6b022;
+}
+
+.line.active .en {
+  color: var(--accent);
+  text-shadow: 0 0 22px #9ee6b033;
+}
+
+.line.active .ko { color: #f1f4f8; }
+
+.note {
+  text-align: center;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 10px;
+}
+
+@media(max-width: 600px) {
+  .wrap { padding: 13px 10px 30px; }
+  .title { font-size: 21px; }
+  .player { top: 4px; padding: 12px; }
+  .lyrics { padding: 20vh 3px; }
+  .line { padding: 12px 5px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="title">FOMO</div>
+      <div class="sub">English lyrics · 한국어 뜻 · 자동 스크롤</div>
+    </div>
+    <div class="pill">BILINGUAL LYRICS</div>
+  </header>
+  <section class="player">
+    <div class="file">
+      <div style="font-size: 24px">♫</div>
+      <div>
+        <strong>fomo.mp3</strong>
+        <small>PC 테스트 모드</small>
+      </div>
+    </div>
+    <audio id="audio" controls preload="metadata" crossorigin="anonymous">
+      <source src="https://raw.githubusercontent.com/spacedustz/abc/main/fomo.mp3" type="audio/mpeg">
+      이 브라우저는 오디오 재생을 지원하지 않습니다.
+    </audio>
+    <div class="controls">
+      <span id="clock">00:00 / --:--</span>
+      <div class="toggles">
+        <label class="toggle">
+          <input id="loop" type="checkbox"><span class="slider"></span> 반복재생
+        </label>
+        <label class="toggle">
+          <input id="early" type="checkbox" checked><span class="slider"></span> 가사 1초 먼저 표시
+        </label>
+      </div>
+    </div>
+  </section>
+  <main class="lyrics" id="lyrics" aria-live="off"></main>
+  <div class="note">페이지를 열면 가사가 즉시 화면에 렌더링됩니다.</div>
+</div>
+<script>
+const entries = [
+  {t: 5.7, en: "Yeah, I'm gone", ko: '그래, 난 이미 떠났어.'},
+  {t: 7.48, en: 'Yeah, yeah, yeah', ko: '그래, 그래, 그래.'},
+  {t: 9.0, en: "Kickin' like a timepiece,", ko: '시계처럼 정확하게 움직여,'},
+  {t: 10.18, en: 'risks glow digital', ko: '위험마저 디지털처럼 빛나.'},
+  {t: 11.34, en: 'Numbers do gymnastics, flip mode pivotal', ko: '숫자들이 곡예하듯 뒤집혀, 판세를 결정해.'},
+  {t: 13.72, en: 'Never play minimal, digits look biblical', ko: '소극적으로 움직이지 않아, 숫자들은 성경처럼 거대해 보여.'},
+  {t: 16.09, en: "Talkin' bout the moves,", ko: '내 움직임에 대해 말하자면,'},
+  {t: 16.97, en: 'my momentum stays cyclical', ko: '내 추진력은 계속 순환해.'},
+  {t: 18.51, en: 'High stakes, every bet look critical', ko: '판돈이 큰 상황, 모든 베팅이 중대해 보여.'},
+  {t: 20.89, en: 'Hands in the pot,', ko: '판돈이 걸린 곳에 손을 얹고,'},
+  {t: 21.77, en: 'every play stay mythical', ko: '모든 플레이가 전설처럼 남아.'},
+  {t: 23.23, en: 'Pressure like a diamond,', ko: '다이아몬드 같은 압박 속에서도,'},
+  {t: 24.13, en: 'yeah I rise individual', ko: '그래, 난 남들과 다르게 치고 올라가.'},
+  {t: 25.62, en: "Talkin' like they in it,", ko: '그들은 마치 자기들도 참여한 것처럼 말하지만,'},
+  {t: 26.48, en: 'but they spectate typical', ko: '늘 구경만 하는 게 보통이지.'},
+  {t: 28.74, en: 'Check the location, penthouse visuals', ko: '장소를 확인해 봐, 펜트하우스의 풍경이 펼쳐져.'},
+  {t: 30.94, en: "Boardroom visions, eels stay residual FOMO got him twitchin',", ko: '이사회실의 큰 그림, 뱀장어처럼 남아 있는 것들… FOMO에 사로잡힌 그는 안절부절못해.'},
+  {t: 34.27, en: 'every scene look pivotal', ko: '모든 장면이 결정적인 순간처럼 보여.'},
+  {t: 35.67, en: 'Tryna catch the wave but they sink so pitiful', ko: '파도를 잡으려 하지만, 그들은 한심하게 가라앉아.'},
+  {t: 38.11, en: 'Rips stay aquatic, shit stay hypnotic', ko: '물살은 거세고, 분위기는 정신을 홀려.'},
+  {t: 40.41, en: 'Formula exotic, every play look melodic', ko: '방식은 독특하고, 모든 플레이는 멜로디처럼 흘러.'},
+  {t: 42.78, en: 'Style stay iconic, blueprint robotic', ko: '스타일은 상징적이고, 설계도는 기계처럼 정교해.'},
+  {t: 45.18, en: 'They be in the comments but the real ones solid', ko: '댓글창에서 떠들어도, 진짜배기들은 흔들림 없어.'},
+  {t: 47.6, en: 'digits in the vault like a hacker', ko: '금고 속 숫자들은 해커가 숨겨둔 것처럼 쌓여 있어.'},
+  {t: 49.06, en: "on a mission I ain't check the total,", ko: '임무를 수행하는 동안 난 총액을 확인하지 않아.'},
+  {t: 50.85, en: "my accountant do the vision movin' like a phantom,", ko: '내 회계사가 상황을 파악하지. 난 유령처럼 움직여.'},
+  {t: 53.21, en: "never post up, I position FOMO got them twitchin',", ko: '드러내지 않고 자리를 잡아. FOMO에 사로잡힌 그들은 안절부절못해.'},
+  {t: 55.61, en: 'yeah, they do the transmission', ko: '그래, 그들은 소문을 퍼뜨리지.'},
+  {t: 57.09, en: 'Front row tickets, but they never in the picture', ko: '맨 앞줄 티켓을 가졌지만, 정작 사진 속에는 없어.'},
+  {t: 59.41, en: "Tryna' catch the frame,", ko: '그 순간을 포착하려 하지만,'},
+  {t: 60.33, en: 'but the moment hit quicker', ko: '순간은 더 빠르게 지나가.'},
+  {t: 61.84, en: 'Ghost in the system,', ko: '시스템 속 유령처럼 존재하지만,'},
+  {t: 62.72, en: 'but I orchestrate the mixture', ko: '그 조합을 지휘하는 건 바로 나야.'},
+  {t: 64.22, en: 'Legacy cemented, every bop paints scriptures', ko: '유산은 단단히 새겨졌고, 모든 비트는 경전처럼 이야기를 써 내려가.'},
+  {t: 66.62, en: 'Need a elevation, yeah the numbers keep running', ko: '더 높은 곳으로 올라가야 해, 숫자는 계속 늘어나.'},
+  {t: 68.94, en: 'Heard they talking plays,', ko: '그들이 작전에 대해 떠든다는 건 들었지만,'},
+  {t: 69.82, en: 'but they moving redundant', ko: '그들의 움직임은 늘 똑같고 진부해.'},
+  {t: 71.3, en: 'Time on my wrist,', ko: '내 손목 위의 시간은,'},
+  {t: 72.18, en: 'no tick just humming', ko: '초침 소리 없이 웅웅 울릴 뿐이야.'},
+  {t: 73.65, en: 'Formal hit they stole,', ko: '그들이 훔친 공식적인 히트곡은,'},
+  {t: 74.61, en: 'now they post start drumming', ko: '이제 그들의 게시물에 북소리가 울리기 시작해.'},
+  {t: 76.11, en: "Came from the side where the odds ain't even", ko: '가능성이 공평하지 않았던 곳에서 시작했어.'},
+  {t: 78.41, en: 'Now I got the top spot,', ko: '이제 정상의 자리를 차지했고,'},
+  {t: 79.75, en: 'air feels sweeter', ko: '공기마저 더 달콤하게 느껴져.'},
+  {t: 80.83, en: 'Watch for the leeches,', ko: '기생충 같은 사람들을 조심해,'},
+  {t: 82.03, en: 'lurk like creepers', ko: '몰래 숨어다니는 그림자처럼.'},
+  {t: 83.17, en: 'Never show the deck,', ko: '패를 절대 보여주지 않아,'},
+  {t: 84.09, en: 'but the game stay deeper', ko: '하지만 게임은 훨씬 더 깊고 복잡해.'},
+  {t: 85.59, en: 'Price tag heavy, so they watch with precision', ko: '가격표가 묵직하니, 사람들은 아주 세밀하게 지켜봐.'},
+  {t: 87.95, en: "Talkin' like they got it,", ko: '자기들이 가진 것처럼 말하지만,'},
+  {t: 88.83, en: 'but they pockets stay timid', ko: '주머니 사정은 여전히 초라해.'},
+  {t: 90.35, en: 'Move like a boss,', ko: '보스처럼 움직이고,'},
+  {t: 91.28, en: 'every car stay hidden FOMO got him nervous,', ko: '차들은 모두 모습을 감춰. FOMO에 사로잡힌 그는 불안해하고,'},
+  {t: 93.6, en: "now the palm start slippin'", ko: '이제 손바닥에 땀이 나기 시작해.'},
+  {t: 95.04, en: 'Slide through the city,', ko: '도시를 미끄러지듯 지나가고,'},
+  {t: 96.0, en: "whole lane stay clearins'", ko: '차선은 온통 깨끗하게 비어 있어.'},
+  {t: 97.52, en: 'Every move major, whole brand got clearance', ko: '모든 움직임은 중요하고, 브랜드 전체가 인정받았어.'},
+  {t: 99.84, en: 'Flight mode active, they stuck in interference', ko: '비행 모드는 활성화됐고, 그들은 간섭 속에 갇혀 있어.'},
+  {t: 102.26, en: "Headlines printin', but the truth stay fearless", ko: '헤드라인은 계속 찍혀 나오지만, 진실은 두려움이 없어.'},
+  {t: 104.6, en: 'Back-to-back meetings, digits flip automatically', ko: '연이은 회의 속에서 숫자들은 자동으로 바뀌어.'},
+  {t: 106.96, en: 'Never chase hype, let the numbers do the magic', ko: '유행을 좇지 않아, 숫자들이 마법을 부리게 둬.'},
+  {t: 109.34, en: 'Talking like they tapped in,', ko: '그들은 상황을 잘 아는 척 말하지만,'},
+  {t: 110.52, en: 'but they moving static FOMO got them tripping,', ko: '정작 제자리걸음이야. FOMO에 사로잡혀 허둥대며,'},
+  {t: 112.6, en: 'tryna match my habits', ko: '내 습관을 따라 하려고 해.'},
+  {t: 113.83, en: 'No posts, no flex,', ko: '게시물도 자랑도 없이,'},
+  {t: 114.97, en: 'just results stay graphic', ko: '결과만 선명하게 드러나.'},
+  {t: 116.49, en: 'Visions so clear, every step cinematic', ko: '비전은 아주 선명하고, 모든 발걸음은 영화 같아.'},
+  {t: 118.85, en: 'Billboard-certified, names stay classic', ko: '빌보드가 인정한 수준, 이름은 오래도록 명성을 유지해.'},
+  {t: 121.23, en: 'Top-tier status, yeah, the moment feel drastic, yuh', ko: '최정상급 지위, 그래, 이 순간은 엄청나게 극적이야, yeah.'},
+  {t: 125.09, en: 'Yeah, the moment feel drastic, yuh', ko: '그래, 이 순간은 엄청나게 극적이야, yeah.'},
+  {t: 127.46, en: 'Yeah, the moment feel drastic, yuh', ko: '그래, 이 순간은 엄청나게 극적이야, yeah.'},
+  {t: 129.84, en: 'Yeah, the moment feel drastic, yuh, yuh, yuh', ko: '그래, 이 순간은 엄청나게 극적이야, yeah, yeah, yeah.'},
+  {t: 133.99, en: 'Yeah, yeah, yeah, yeah', ko: '그래, 그래, 그래, 그래.'},
+  {t: 138.75, en: 'Yeah, yeah, yeah', ko: '그래, 그래, 그래.'}
+];
+
+const root = document.getElementById('lyrics');
+const audio = document.getElementById('audio');
+const early = document.getElementById('early');
+const loop = document.getElementById('loop');
+const clock = document.getElementById('clock');
+
+// 1. 페이지 로드 직후 무조건 가사 엘리먼트들을 생성해서 화면에 꽂아넣습니다.
+const nodes = entries.map((e, i) => {
+  const d = document.createElement('section');
+  d.className = 'line future';
+  d.dataset.i = i;
+  const en = document.createElement('div');
+  en.className = 'en';
+  en.textContent = e.en;
+  const ko = document.createElement('div');
+  ko.className = 'ko';
+  ko.textContent = e.ko;
+  d.append(en, ko);
+  root.appendChild(d);
+  return d;
+});
+
+console.log("가사 렌더링 완료, 총 개수:", nodes.length);
+
+let active = -1;
+
+function fmt(s) {
+  if (!Number.isFinite(s)) return '00:00';
+  return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+}
+
+function update() {
+  const t = audio.currentTime + (early.checked ? 1 : 0);
+  let idx = -1;
+  for (let i = 0; i < entries.length; i++) {
+    if (entries[i].t <= t) idx = i;
+    else break;
+  }
+  if (idx !== active) {
+    active = idx;
+    nodes.forEach((n, i) => {
+      n.className = 'line ' + (i === idx ? 'active' : i < idx ? 'past' : 'future');
+    });
+    if (idx >= 0) nodes[idx].scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  clock.textContent = fmt(audio.currentTime) + ' / ' + fmt(audio.duration);
+}
+
+audio.addEventListener('timeupdate', update);
+audio.addEventListener('seeked', update);
+audio.addEventListener('loadedmetadata', update);
+audio.addEventListener('play', update);
+early.addEventListener('change', update);
+loop.addEventListener('change', () => { audio.loop = loop.checked; });
+audio.addEventListener('ended', () => {
+  nodes.forEach(n => n.classList.remove('active'));
+});
+</script>
+</body>
+</html>
